@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --purple-cus-300: #9290C3;
+    --gray-cus-100: #F3F4F6;
+    --gray-cus-300: #BBBBBB;
+    --gray-cus-400: #727884;
+    --gray-cus-500: #3e4149;
+    --gray-cus-600: #2E2F36;
+    --gray-cus-800: #212328;
+    --dark-cus-700: #0A0A0A;
+    --dark-cus-800: #27272A;
+    --dark-cus-900: #131313;
+  }
+}
+
+@layer base {
+  .container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+
+  .bg-banner__main {
+    background: linear-gradient(0deg, #000000e6, rgba(0, 0, 0, .863) 5.79%, rgba(0, 0, 0, .802) 10.88%, rgba(0, 0, 0, .721) 15.63%, rgba(0, 0, 0, .627) 20.37%, rgba(0, 0, 0, .523) 25.46%, rgba(0, 0, 0, .416) 31.25%, rgba(0, 0, 0, .311) 38.08%, rgba(0, 0, 0, .213) 46.3%, rgba(0, 0, 0, .128) 56.25%, #0000000f 68.29%, rgba(0, 0, 0, .016) 82.75%, #0000);;
+  }
+
+  .bg-card {
+    background: linear-gradient(0deg, #0d0d0de6, rgb(25 25 25 / 86%) 5.79%, rgb(23 23 23 / 80%) 10.88%, rgb(18 18 18 / 72%) 15.63%, rgb(23 23 23 / 63%) 20.37%, rgba(0, 0, 0, .523) 25.46%, rgba(0, 0, 0, .416) 31.25%, rgba(0, 0, 0, .311) 38.08%, rgba(0, 0, 0, .213) 46.3%, rgba(0, 0, 0, .128) 56.25%, #0000000f 68.29%, rgba(0, 0, 0, .016) 82.75%, #0000);
+  }
+
+  .hide-scrollbar{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+}
+
+@layer components {
+
+  /* input */
+  .transition-outline {
+    transition: outline 0.2s linear;
+    outline: solid 2px transparent;
+  }
+
+  .transition-outline:focus {
+    outline: solid 2px var(--purple-cus-300);
+  }
+
+  /* home */
+  .btn-list__manga {
+    background: linear-gradient(90deg, rgba(255,255,255,1) 42%, rgba(0,0,0,0.8968837535014006) 76%, rgba(0,0,0,1) 100%);;
+  }
+
+  .fine-transition {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-duration: .2s;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+  }
+}
