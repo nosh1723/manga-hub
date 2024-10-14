@@ -1,10 +1,9 @@
 import Link from 'next/link'
-import React from 'react'
 import FormLogin from './form'
 
 type Props = {}
 
-const LoginPage = (props: Props) => {
+const LoginPage = async(props: Props) => {
   return (
     <div className='w-96 sm:w-2/5 sm:max-w-[600px] sm:min-w-[400px] px-5 rounded-t-lg'>
       <div className='top-0 left-0 w-full h-2 rounded-t-lg bg-[--purple-cus-300]'></div>

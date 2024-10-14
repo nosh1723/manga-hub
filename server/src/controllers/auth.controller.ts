@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import jwt, { VerifyErrors } from "jsonwebtoken";
 import sendToMail from "../mail/mailConfig";
 import CodeModel from "../models/Code.schema";
-import { RequestModel } from "../interface/user";
+import { IUser, RequestModel } from "../interface/user";
 
 interface PayloadToken {
     id: any;
@@ -18,7 +18,7 @@ class AuthController {
 
     generateAccessToken = async (value: PayloadToken | object | string) => {
         return jwt.sign(value, process.env.SECRET_ACCESSTOKEN!, {
-            expiresIn: "1h",
+            expiresIn: "1d",
         });
     }
 
@@ -40,17 +40,19 @@ class AuthController {
 
             const { email, username, password } = req.body
 
-            const existingEmail = await UserModel.findOne({ email })
-            if (existingEmail) {
-                return res.status(STATUS.BAD_REQUEST).json({
-                    message: "Email already exist"
-                })
-            }
-
             const existingUsername = await UserModel.findOne({ username })
             if (existingUsername) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'username',
                     message: "Username already exist"
+                })
+            }
+
+            const existingEmail = await UserModel.findOne({ email })
+            if (existingEmail) {
+                return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'email',
+                    message: "Email already exist"
                 })
             }
 
@@ -63,6 +65,7 @@ class AuthController {
             })
 
             return res.status(STATUS.OK).json({
+                status: STATUS.OK,
                 message: "Successfully registered!"
             })
         } catch (error: any) {
@@ -88,6 +91,7 @@ class AuthController {
                 user = await UserModel.findOne({ username })
                 if (!user)
                     return res.status(STATUS.BAD_REQUEST).json({
+                        name: 'username',
                         message: "Invalid username or password",
                     });
             }
@@ -113,6 +117,7 @@ class AuthController {
 
             if (!isComparePass) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'password',
                     message: "Invalid email or password",
                 });
             }
@@ -133,7 +138,7 @@ class AuthController {
                 httpOnly: true,
                 path: "/",
                 secure: false,      // Chỉ hoạt động qua HTTPS
-                sameSite: 'none'
+                sameSite: 'lax'
             });
 
             delete user._doc.password;
@@ -141,6 +146,7 @@ class AuthController {
             return res.status(STATUS.OK).json({
                 message: "Login successful",
                 accessToken: accessToken,
+                refreshToken: refreshToken,
                 user: user
             })
         } catch (error: any) {
@@ -185,7 +191,7 @@ class AuthController {
                         maxAge: 24 * 60 * 60 * 1000 * 60,
                         httpOnly: true,
                         path: "/",
-                        sameSite: "none",
+                        sameSite: "lax",
                         secure: false,
                     });
 
@@ -227,11 +233,12 @@ class AuthController {
                         maxAge: 0,
                         httpOnly: true,
                         path: "/",
-                        sameSite: "none",
+                        sameSite: "lax",
                         secure: false,
                     });
 
                     return res.status(STATUS.OK).json({
+                        status: STATUS.OK,
                         message: "Logged out successfully"
                     });
                 }
@@ -421,27 +428,27 @@ class AuthController {
         }
     }
 
-    changePassword = async(req: Request, res: Response) => {
+    changePassword = async (req: Request, res: Response) => {
         try {
             const { email, oldPassword, newPassword } = req.body
-            if(!email || !oldPassword || !newPassword) {
+            if (!email || !oldPassword || !newPassword) {
                 return res.status(STATUS.BAD_REQUEST).json({
                     message: "Invalid value",
                 });
             }
 
-            const user = await UserModel.findOne({email})
-            if(!user) {
+            const user = await UserModel.findOne({ email })
+            if (!user) {
                 return res.status(STATUS.BAD_REQUEST).json({
                     message: "User does not exits",
                 });
-            } 
+            }
 
             const isComparePass = await bcrypt.compare(
                 oldPassword,
                 user.password
             );
-            if(!isComparePass) {
+            if (!isComparePass) {
                 return res.status(STATUS.BAD_REQUEST).json({
                     message: "The password is incorrect",
                 });
@@ -469,10 +476,30 @@ class AuthController {
         }
     }
 
-    currentUser = async(req: RequestModel, res: Response) => {
+    currentUser = async (req: RequestModel, res: Response) => {
         try {
-            const user = req.user;
-            console.log(user);
+            const token = req.headers.authorization;
+            if (!token) {
+                return res.status(STATUS.BAD_REQUEST).json({
+                    message: "Token does not exist"
+                })
+            }
+            const accessToken = token.split(' ')[1]
+            jwt.verify(accessToken, process.env.SECRET_ACCESSTOKEN!,
+                async (err: VerifyErrors | null, data?: object | string) => {
+                    if (err) {
+                        return res.status(STATUS.AUTHORIZED).json({
+                            message: err.message,
+                        });
+                    }
+
+                    const user = await UserModel.findOne({ _id: (data as PayloadToken)?.id })
+
+                    delete user?._doc.password;
+
+                    return res.status(STATUS.OK).json(user)
+                })
+
         } catch (error: any) {
             console.log('current user: ', error);
             return res.status(STATUS.INTERNAL).json({

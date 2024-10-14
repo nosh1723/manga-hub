@@ -1,5 +1,6 @@
 import { Router } from "express";
 import authController from "../controllers/auth.controller";
+import authMiddleware from "../middlewares/auth.middleware";
 
 
 const authRouter = Router()
@@ -13,6 +14,6 @@ authRouter.post("/compare-code", authController.compareCode)
 authRouter.post("/update-forgot-password", authController.updateForgotPassword)
 authRouter.post("/change-password", authController.changePassword)
 
-authRouter.get("/current-user", authController.currentUser)
+authRouter.get("/current-user", authMiddleware.verifyToken, authController.currentUser)
 
 export default authRouter
