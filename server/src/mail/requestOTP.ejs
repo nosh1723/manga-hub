@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: sans-serif;
+      }
+      .body {
+        width: 100%;
+        margin: auto;
+        font-family: sans-serif;
+      }
+
+      .box {
+        max-width: 640px;
+        margin: auto;
+        min-height: 200px;
+        border: 1px solid rgb(173, 173, 173);
+        border-radius: 4px;
+        background-color: white;
+        overflow: hidden;
+      }
+      header {
+        height: 60px;
+        width: 100%;
+        background-color: #111827;
+        padding: 0 16px;
+        align-items: center;
+        display: flex;
+        justify-content: start;
+      }
+      header h2 {
+        color: white;
+        margin-left: 10px;
+        font-size: 20px;
+      }
+      .logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: white;
+        margin-top: 10px;
+      }
+
+      .content {
+        padding: 10px 20px;
+      }
+      .content p {
+        font-size: 14px;
+      }
+      .content i {
+        font-size: 12px;
+      }
+      footer {
+        height: 60px;
+        background-color: #111827;
+        color: white;
+        padding: 4px 16px;
+      }
+      footer p {
+        font-size: 12px;
+        margin: 0;
+        font-weight: 300;
+      }
+      footer .contact {
+        font-size: 14px;
+        margin-top: 8px;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <header>
+        <div class="logo"></div>
+        <div>
+          <h2>Manga Hub <h2>
+        </div>
+      </header>
+      <main>
+        <div class="content">
+          <p>Hello : <%=full_name %></p>
+          <p>Verification code : <span class="otp"><%=otp %></span></p>
+          <p>
+            Note:
+            <strong
+              >The code is valid for a maximum of
+              <span style="font-weight: 700; color: blue">5 minutes</span></strong
+            >
+          </p>
+          <i>* This is an automated email, please do not reply to this message*</i>
+        </div>
+      </main>
+      <footer>
+        <p>If you encounter any issues, please contact us :</p>
+        <p class="contact"></p>
+          Email:<a href="cathu1782003@gmail.com">
+            cathu1782003@gmail.com
+          </a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

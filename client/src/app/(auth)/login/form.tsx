@@ -1,10 +1,7 @@
 'use client'
 
-import React from 'react'
-import { number, z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
   FormControl,
@@ -14,39 +11,62 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Checkbox } from '@/components/ui/checkbox'
+import useAuthStore from "@/stores/auth.store"
+import { LoginEmailBody, LoginUsernameBody } from '@/validation/auth'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { EnvelopeClosedIcon, ReloadIcon } from "@radix-ui/react-icons"
 import Link from 'next/link'
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { FaGoogle, FaRegUser } from "react-icons/fa"
+import { z } from "zod"
 
 type Props = {}
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  password: z.string()
-})
-
 const FormLogin = (props: Props) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: '',
-      password: ''
-    },
-  })
+  const { isChangeLogin } = useAuthStore()
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  return (
+    <>
+      {isChangeLogin ? <FormEmail /> : <FormUsername />}
+    </>
+
+  )
+}
+
+export default FormLogin
+
+const FormUsername = (props: Props) => {
+  const { setChangeLogin, login, error, isLoading, initUsername } = useAuthStore()
+  const router = useRouter()
+
+  const form = useForm<z.infer<typeof LoginUsernameBody>>({
+    resolver: zodResolver(LoginUsernameBody),
+    defaultValues: initUsername,
+  })
+  
+  async function onSubmit(values: z.infer<typeof LoginUsernameBody>) {
+    await login(values)
+    if (localStorage.getItem('token')) router.push('/')
   }
+
+  useEffect(() => {
+    form.setError(error?.name, {
+      type: 'server',
+      message: error?.message
+    });
+  }, [error])
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name={'username'}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username or email</FormLabel>
+              <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>
@@ -79,10 +99,116 @@ const FormLogin = (props: Props) => {
           </div>
           <Link href={''} className='text-[--purple-cus-300] font-medium text-sm hover:opacity-90'>Forgot Password?</Link>
         </div>
-        <Button variant='purple' type="submit">Sign In</Button>
+        <Button variant="purple" type="submit" disabled={isLoading}>
+          {isLoading ? <>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </> : 'Sign In'}
+        </Button>
+
+        <p className="flex justify-center text-sm !mt-5">Or Continue With</p>
+        <div className="!mt-5 flex gap-2">
+          <Button variant="gray" className="bg-[#F7EFE5] gap-2 rounded-sm">
+            <FaGoogle className="mt-[1px]" /> Sign up with Google
+          </Button>
+          <Button
+            variant="gray"
+            className="bg-[#F7EFE5] gap-2 rounded-sm"
+            type="button"
+            onClick={() => setChangeLogin(true)}
+          >
+            <EnvelopeClosedIcon className="mt-[1px]" /> Sign up with Email
+          </Button>
+        </div>
       </form>
     </Form>
   )
 }
 
-export default FormLogin
+const FormEmail = (props: Props) => {
+  const { setChangeLogin, login, error, isLoading, initEmail } = useAuthStore()
+  const router = useRouter()
+
+  const form = useForm<z.infer<typeof LoginEmailBody>>({
+    resolver: zodResolver(LoginEmailBody),
+    defaultValues: initEmail,
+  })
+
+  async function onSubmit(values: z.infer<typeof LoginEmailBody>) {
+    await login(values)
+    if (localStorage.getItem('token')) router.push('/')
+  }
+
+  useEffect(() => {
+    form.setError(error?.name, {
+      type: 'server',
+      message: error?.message
+    });
+  }, [error])
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name={'email'}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem className='!mt-5'>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input placeholder="" type='password' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className='flex justify-between !mt-3'>
+          <div className="flex items-center space-x-2">
+            <Checkbox id="terms" />
+            <label
+              htmlFor="terms"
+              className="text-sm  leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Remember me
+            </label>
+          </div>
+          <Link href={''} className='text-[--purple-cus-300] font-medium text-sm hover:opacity-90'>Forgot Password?</Link>
+        </div>
+        <Button variant="purple" type="submit" disabled={isLoading}>
+          {isLoading ? <>
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </> : 'Sign In'}
+        </Button>
+
+        <p className="flex justify-center text-sm !mt-5">Or Continue With</p>
+        <div className="!mt-5 flex gap-2">
+          <Button variant="gray" className="bg-[#F7EFE5] gap-2 rounded-sm">
+            <FaGoogle className="mt-[1px]" /> Sign up with Google
+          </Button>
+          <Button
+            variant="gray"
+            className="bg-[#F7EFE5] gap-2 rounded-sm"
+            type="button"
+            onClick={() => setChangeLogin(false)}
+          >
+            <FaRegUser className="mt-[1px]" /> Sign up with Username
+          </Button>
+        </div>
+      </form>
+    </Form>
+  )
+}
