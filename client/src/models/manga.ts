@@ -1,3 +1,4 @@
+
 export interface Language {
     en: string,
     vi: string
@@ -32,19 +33,41 @@ export interface Manga {
     id: string,
     type: string,
     attributes: Attributes,
-    relationships: Array<Relationship> 
+    relationships: Array<Relationship>,
+    coverUrl: string,
+    chapter: Array<Chapter>,
+    author: Author
 }
 
+export interface MangaLatestResult {
+    id: string,
+    title: Language,
+    lastChapter: string | null,
+    updatedAt: string,
+    coversUrl: string
+}
 
 export interface AttributesChapter {
     chapter: string,
     title: string,
     translatedLanguage: string,
-    pages: number
+    pages: number,
+    updatedAt: string
 }
 
 export interface Chapter {
     id: string,
     type: string,
     attributes: AttributesChapter
+}
+
+export interface Author{
+    data: {
+        id: string,
+        type: string,
+        attributes: {
+            name: string,
+        },
+        relationships: Array<Relationship>
+    }
 }

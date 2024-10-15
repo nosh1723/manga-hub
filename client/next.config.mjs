@@ -4,13 +4,7 @@ const nextConfig = {
         remotePatterns: [
           {
             protocol: 'https',
-            hostname: 'storage-ct.lrclib.net',
-            port: '',
-            pathname: '/**',
-          },
-          {
-            protocol: 'https',
-            hostname: 'storagect.lrclib.net',
+            hostname: 'uploads.mangadex.org',
             port: '',
             pathname: '/**',
           },

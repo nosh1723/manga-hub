@@ -1,13 +1,13 @@
 'use client'
 
+import { test } from '@/context/tesr'
 import useAuthStore from '@/stores/auth.store'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import AvatarDropdown from '../common/avatar-dropdown'
 import { Search } from '../common/search'
 import { Button } from '../ui/button'
-import AvatarDropdown from '../common/avatar-dropdown'
-import { test } from '@/context/tesr'
 
 type Props = {}
 type NavList = {
@@ -18,7 +18,7 @@ type NavList = {
 const Header = (props: Props) => {
   const router = useRouter()
   const pathName = usePathname()
-  const { currentUser, getAccessToken } = useAuthStore()
+  const { currentUser } = useAuthStore()
   const [isLoading, setIsLoading] = useState(true)
 
   const navList: NavList[] = [
@@ -33,11 +33,6 @@ const Header = (props: Props) => {
     const time = setTimeout(() => {
       setIsLoading(false)
     }, 200)
-    async function fetchT(){
-      const t = await test()
-      console.log(t);
-    }
-    fetchT()
     return () => clearTimeout(time)
   }, [])
 

@@ -7,9 +7,10 @@ type Props = {}
 const SlideSession = (props: Props) => {
     const { refreshToken, getCurrentUser } = useAuthStore()
     useEffect(() => {
-        getCurrentUser()
+      const accessToken = localStorage.getItem('token')
+      refreshToken(accessToken)
+      getCurrentUser()
         const interval = setInterval(async () => {
-          const accessToken = localStorage.getItem('token')
           if(accessToken){
             await refreshToken(accessToken)
           }

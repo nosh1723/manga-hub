@@ -7,3 +7,13 @@ export interface Cover {
         fileName: string
     }
 }
+
+export interface ResultCovers {
+    fileName: string,
+    mangaId: string
+}
+
+export interface CoversArtRes {
+    mangaId: string,
+    coversUrl: string
+}
