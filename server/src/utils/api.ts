@@ -23,7 +23,9 @@ export const artist = (id: string) => mangadexAxios.get('artist/' + id)
 
 export const author = (id: string) => mangadexAxios.get('author/' + id)
 
-export const chapters = (id: string, params?: {[key: string]: string}) => mangadexAxios.get('manga/' + id + '/feed', {
+export const statistics = (id: string) => mangadexAxios.get('statistics/manga/' + id)
+
+export const chapters = (id: string, params?: {[key: string]: any}) => mangadexAxios.get('manga/' + id + '/feed', {
     params: {
         ...params
     }

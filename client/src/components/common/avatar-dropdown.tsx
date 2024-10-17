@@ -38,7 +38,7 @@ const AvatarDropdown = ({ currentUser }: Props) => {
                     }
                 </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 border-[.5px] border-[#27272a]">
+            <DropdownMenuContent className="w-56 border-[.5px] border-[#27272a]" side="bottom" align="end">
                 <DropdownMenuLabel>{currentUser?.username}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>

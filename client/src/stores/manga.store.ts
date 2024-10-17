@@ -16,7 +16,7 @@ type MangaState = {
 
 const useMangaStore = create<MangaState>((set, get) => ({
     listLatestManga: null,
-    isLoading: false,
+    isLoading: true,
     error: '',
     lazyLoad: true,
     manga: null,

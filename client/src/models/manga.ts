@@ -36,7 +36,8 @@ export interface Manga {
     relationships: Array<Relationship>,
     coverUrl: string,
     chapter: Array<Chapter>,
-    author: Author
+    author: Author,
+    mangaByAuthor: Array<MangaLatestResult>
 }
 
 export interface MangaLatestResult {
@@ -61,6 +62,11 @@ export interface Chapter {
     attributes: AttributesChapter
 }
 
+export interface ChapterBody {
+    chapterIndex: number
+    mangaId: string
+}
+
 export interface Author{
     data: {
         id: string,
@@ -69,5 +75,14 @@ export interface Author{
             name: string,
         },
         relationships: Array<Relationship>
+    }
+}
+
+export interface Statistics {
+    statistics: {
+        [key: string]: {
+            follows: number,
+            rating: any
+        }
     }
 }
