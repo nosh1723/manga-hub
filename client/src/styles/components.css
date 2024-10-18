@@ -28,17 +28,18 @@
   }
 
   .bg-banner__main {
-    background: linear-gradient(0deg, #000000e6, rgba(0, 0, 0, .863) 5.79%, rgba(0, 0, 0, .802) 10.88%, rgba(0, 0, 0, .721) 15.63%, rgba(0, 0, 0, .627) 20.37%, rgba(0, 0, 0, .523) 25.46%, rgba(0, 0, 0, .416) 31.25%, rgba(0, 0, 0, .311) 38.08%, rgba(0, 0, 0, .213) 46.3%, rgba(0, 0, 0, .128) 56.25%, #0000000f 68.29%, rgba(0, 0, 0, .016) 82.75%, #0000);;
+    background: linear-gradient(0deg, #000000e6, rgba(0, 0, 0, .863) 5.79%, rgba(0, 0, 0, .802) 10.88%, rgba(0, 0, 0, .721) 15.63%, rgba(0, 0, 0, .627) 20.37%, rgba(0, 0, 0, .523) 25.46%, rgba(0, 0, 0, .416) 31.25%, rgba(0, 0, 0, .311) 38.08%, rgba(0, 0, 0, .213) 46.3%, rgba(0, 0, 0, .128) 56.25%, #0000000f 68.29%, rgba(0, 0, 0, .016) 82.75%, #0000);
+    ;
   }
 
   .bg-card_main {
     background: linear-gradient(0deg, #0d0d0de6, rgb(25 25 25 / 86%) 5.79%, rgb(23 23 23 / 80%) 10.88%, rgb(18 18 18 / 72%) 15.63%, rgb(23 23 23 / 63%) 20.37%, rgba(0, 0, 0, .523) 25.46%, rgba(0, 0, 0, .416) 31.25%, rgba(0, 0, 0, .311) 38.08%, rgba(0, 0, 0, .213) 46.3%, rgba(0, 0, 0, .128) 56.25%, #0000000f 68.29%, rgba(0, 0, 0, .016) 82.75%, #0000);
   }
 
-  .hide-scrollbar{
+  .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
-}
+  }
 }
 
 @layer components {
@@ -55,39 +56,46 @@
 
   /* home */
   .btn-list__manga {
-    background: linear-gradient(90deg, rgba(255,255,255,1) 42%, rgba(0,0,0,0.8968837535014006) 76%, rgba(0,0,0,1) 100%);;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 1) 42%, rgba(0, 0, 0, 0.8968837535014006) 76%, rgba(0, 0, 0, 1) 100%);
+    ;
   }
 
   .fine-transition {
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
     transition-duration: .2s;
-    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   }
 
 
   .custom-scrollbar::-webkit-scrollbar {
-    width: 8px; /* Độ rộng của thanh scrollbar */
+    width: 8px;
+    /* Độ rộng của thanh scrollbar */
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #7b7b7b; /* Màu của thanh cuộn */
+    background-color: #7b7b7b;
+    /* Màu của thanh cuộn */
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-track {
-    background-color: #424242; /* Màu nền của track thanh cuộn */
+    background-color: #424242;
+    /* Màu nền của track thanh cuộn */
   }
 
   .custom-scrollbar-v2::-webkit-scrollbar {
-    width: 8px; /* Độ rộng của thanh scrollbar */
+    width: 8px;
+    /* Độ rộng của thanh scrollbar */
   }
-  
+
   .custom-scrollbar-v2::-webkit-scrollbar-thumb {
-    background-color: #7b7b7b; /* Màu của thanh cuộn */
+    background-color: #7b7b7b;
+    /* Màu của thanh cuộn */
     border-radius: 5px;
   }
-  
+
   .custom-scrollbar-v2::-webkit-scrollbar-track {
-    background-color: #424242; /* Màu nền của track thanh cuộn */
+    background-color: #424242;
+    /* Màu nền của track thanh cuộn */
     border-radius: 5px;
   }
 }

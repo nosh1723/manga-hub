@@ -1,11 +1,7 @@
-import { LayoutProps } from '@/models'
-import Image from 'next/image'
-import React from 'react'
-import Link from 'next/link'
-import Header from '@/components/layout/header'
-import Footer from '@/components/layout/footer'
 
-type Props = {}
+import Footer from '@/components/layout/footer'
+import Header from '@/components/layout/header'
+import { LayoutProps } from '@/models'
 
 const MainLayout = ({children}: LayoutProps) => {
   return (

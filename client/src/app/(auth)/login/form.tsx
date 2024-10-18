@@ -22,14 +22,16 @@ import { useForm } from "react-hook-form"
 import { FaGoogle, FaRegUser } from "react-icons/fa"
 import { z } from "zod"
 
-type Props = {}
+type Props = {
+  setIsChangeAnimation: (isChangeAnimation: boolean) => void
+}
 
-const FormLogin = (props: Props) => {
+const FormLogin = ({setIsChangeAnimation}: Props) => {
   const { isChangeLogin } = useAuthStore()
 
   return (
     <>
-      {isChangeLogin ? <FormEmail /> : <FormUsername />}
+      {isChangeLogin ? <FormEmail setIsChangeAnimation={setIsChangeAnimation}/> : <FormUsername setIsChangeAnimation={setIsChangeAnimation}/>}
     </>
 
   )
@@ -37,9 +39,8 @@ const FormLogin = (props: Props) => {
 
 export default FormLogin
 
-const FormUsername = (props: Props) => {
+const FormUsername = ({setIsChangeAnimation}: Props) => {
   const { setChangeLogin, login, error, isLoading, initUsername } = useAuthStore()
-  const router = useRouter()
 
   const form = useForm<z.infer<typeof LoginUsernameBody>>({
     resolver: zodResolver(LoginUsernameBody),
@@ -47,8 +48,9 @@ const FormUsername = (props: Props) => {
   })
   
   async function onSubmit(values: z.infer<typeof LoginUsernameBody>) {
-    await login(values)
-    if (localStorage.getItem('token')) router.push('/')
+    const res = await login(values)
+    
+    if (localStorage.getItem('token') && res) setIsChangeAnimation(true)
   }
 
   useEffect(() => {
@@ -125,7 +127,7 @@ const FormUsername = (props: Props) => {
   )
 }
 
-const FormEmail = (props: Props) => {
+const FormEmail = ({setIsChangeAnimation}: Props) => {
   const { setChangeLogin, login, error, isLoading, initEmail } = useAuthStore()
   const router = useRouter()
 
@@ -135,8 +137,8 @@ const FormEmail = (props: Props) => {
   })
 
   async function onSubmit(values: z.infer<typeof LoginEmailBody>) {
-    await login(values)
-    if (localStorage.getItem('token')) router.push('/')
+    const res = await login(values)
+    if (localStorage.getItem('token') && res) setIsChangeAnimation(true)
   }
 
   useEffect(() => {

@@ -5,7 +5,7 @@ type Props = {}
 
 const HomePage = (props: Props) => {
   return (
-    <div className='h-full'>
+    <div className='relative h-full'>
       <SlideHome />
 
       <div className='container py-20 px-24 '>

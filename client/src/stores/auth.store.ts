@@ -16,7 +16,7 @@ type AuthState = {
     isLoading: boolean,
     error: any,
     register: (values: { username: string, password: string, email: string }) => Promise<any>,
-    login: (values: LoginUsernameBodyType | LoginEmailBodyType) => Promise<void>,
+    login: (values: LoginUsernameBodyType | LoginEmailBodyType) => Promise<any>,
     logout: () => Promise<any>,
     getCurrentUser: (header?: HeadersInit | undefined) => Promise<void>,
     refreshToken: (accessToken: string | null) => Promise<void>,
@@ -89,6 +89,8 @@ const useAuthStore = create<AuthState>((set, get) => ({
                     password: ''
                 }
             })
+
+            return res
         } catch (error: any) {
             set({ error: error.payload });
         } finally {
