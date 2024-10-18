@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getListChapter, getManga, getStatistics } from './action'
 import ListChapter from './listChapter'
+import HeaderButton from './header-button'
 
 type Params = {
     params: {
@@ -15,7 +16,7 @@ type Params = {
 
 const DetailsManga = async ({ params }: Params) => {
     const manga = await getManga(params.id)
-    const listChapter = await getListChapter({ chapterIndex: 1, mangaId: params.id })
+    const listChapter = await getListChapter({ mangaId: params.id })
 
     return (
         <div className='container px-40 mx-auto mt-14 flex flex-col items-center mb-20'>
@@ -46,10 +47,7 @@ const DetailsManga = async ({ params }: Params) => {
                                         {manga?.attributes.tags.map((tag, index) => (<div key={index} className='flex-none px-3 bg-[--gray-cus-100] rounded-2xl text-black text-sm'>{tag.attributes.name.en}</div>))}
 
                                     </div>
-                                    <div className='flex mt-3 gap-2'>
-                                        <Button variant={'purple'} className='w-max px-5 py-[6px] text-sm h-auto'>Follow</Button>
-                                        <Button variant={'gray'} className='w-max px-5 py-[6px] text-sm h-auto bg-[#F6B17A] text-gray-900'>Start Reading</Button>
-                                    </div>
+                                    <HeaderButton listChapter={listChapter}/>
                                 </div>
                             </div>
                         </div>

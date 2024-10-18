@@ -8,6 +8,12 @@ const nextConfig = {
             port: '',
             pathname: '/**',
           },
+          {
+            protocol: 'https',
+            hostname: 'cmdxd98sb0x3yprd.mangadex.network',
+            port: '',
+            pathname: '/**',
+          },  
         ],
       },
 };

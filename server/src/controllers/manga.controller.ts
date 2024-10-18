@@ -1,10 +1,9 @@
 import { Request, Response } from "express"
 import STATUS from "../utils/status"
-import { author, chapters, coverArt, manga, mangaList, statistics } from "../utils/api"
-import { Attributes, Chapter, Language, Manga } from "../interface/manga"
+import { author, chapter, chapterImage, chapters, coverArt, manga, mangaList, statistics } from "../utils/api"
+import { Attributes, Chapter, Language, Manga, Relationship } from "../interface/manga"
 import { Cover, CoversArtRes, ResultCovers } from "../interface/covers"
-
-interface ObjectFormat { [key: string]: any }
+import { ObjectFormat } from "../interface/common"
 
 interface ListChapter {
     data: Array<Chapter>,
@@ -201,14 +200,8 @@ class MangaController {
 
     listChapter = async(req: Request, res: Response) => {
         try {
-            const { mangaId, chapterIndex } = req.body
-            const limit = 10
-            const offset = chapterIndex === 1 ? 0 : chapterIndex === 2 ? 10 : 10 * chapterIndex
-            const params = {
-                limit,
-                offset
-            }
-            const chapter: any = await this.getListChapter(mangaId, params)
+            const { mangaId } = req.body
+            const chapter: any = await this.getListChapter(mangaId)
 
             return res.status(STATUS.OK).json({
                 status: STATUS.OK,
@@ -220,10 +213,50 @@ class MangaController {
         }
     }
 
+    getChapter = async(req: Request, res: Response) =>  {
+        try {
+            const { id } = req.params
+            const getChapter: any = (await chapter(id)).data.data
+            const mangaId: string = getChapter?.relationships.find((i: Relationship) => i.type === 'manga').id
+            const mangaRes: any = (await manga(mangaId)).data.data
+
+            const order = this.orderParams({ chapter: 'asc' }, {})
+            const chapterRes: any = await this.getListChapter(mangaId, order)
+
+            return res.status(STATUS.OK).json({
+                status: STATUS.OK,
+                data: {
+                    getChapter,
+                    manga: {
+                        ...mangaRes,
+                        chapter: chapterRes.data
+                    }
+                }
+            })
+        } catch (error: any) {
+            console.log(error);
+            return res.status(STATUS.INTERNAL).json(error)
+        }
+    }
+
     statistics = async(req: Request, res: Response) => {
         try {
             const { id } = req.params
             const result = (await statistics(id)).data
+            return res.status(STATUS.OK).json({
+                status: STATUS.OK,
+                data: result
+            })
+        } catch (error: any) {
+            console.log(error);
+            return res.status(STATUS.INTERNAL).json(error)
+        }
+    }
+
+    getChapterImages = async(req: Request, res: Response) => {
+        try {
+            const { id } = req.params
+            const result = (await chapterImage(id)).data
             return res.status(STATUS.OK).json({
                 status: STATUS.OK,
                 data: result

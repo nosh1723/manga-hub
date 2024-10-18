@@ -63,7 +63,6 @@ export interface Chapter {
 }
 
 export interface ChapterBody {
-    chapterIndex: number
     mangaId: string
 }
 
@@ -84,5 +83,14 @@ export interface Statistics {
             follows: number,
             rating: any
         }
+    }
+}
+
+export interface ChapterImage {
+    baseUrl: string,
+    chapter: {
+        hash: string,
+        data: Array<string>,
+        dataServer: Array<string>
     }
 }

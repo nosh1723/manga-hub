@@ -44,11 +44,11 @@ const Header = (props: Props) => {
       < nav className='container h-14 flex items-center' >
         <Link href={'/'}><h1 className='text-xl font-medium'>MangaHub</h1></Link>
 
-        <div className='flex gap-5 ml-10 text-sm text-[--gray-cus-300]'>
+        {/* <div className='flex gap-5 ml-10 text-sm text-[--gray-cus-300]'>
           {navList.map((i: NavList, index: number) => (
             <Link key={index} href={i.path} className={`hover:text-[#e9e9e9] ${pathName === i.path ? 'text-[#e9e9e9]' : ''}`}>{i.name}</Link>
           ))}
-        </div>
+        </div> */}
         <div className='flex flex-1 gap-5 justify-end'>
           <Search className='w-[18rem]' />
           {currentUser ? <AvatarDropdown currentUser={currentUser} /> :
