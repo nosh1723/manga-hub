@@ -258,6 +258,7 @@ class AuthController {
 
             if (!email) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'email',
                     message: "You have not entered a email"
                 });
             }
@@ -265,6 +266,7 @@ class AuthController {
             const user = await UserModel.findOne({ email })
             if (!user) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'email',
                     message: "Invalid email",
                 });
             }
@@ -322,11 +324,13 @@ class AuthController {
             const { code, email } = req.body;
             if (!code) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'code',
                     message: "You have not entered a code",
                 });
             }
             if (!email) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'code',
                     message: "You have not entered a email",
                 });
             }
@@ -334,6 +338,7 @@ class AuthController {
             const user = await UserModel.findOne({ email })
             if (!user) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'code',
                     message: "Invalid email",
                 });
             }
@@ -343,6 +348,7 @@ class AuthController {
             });
             if (!existingCode) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'code',
                     message: "This code does not exist on the server",
                 });
             }
@@ -350,6 +356,7 @@ class AuthController {
             const checkTimeOtp = new Date()
             if (checkTimeOtp.getTime() > existingCode.expired.getTime()) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'code',
                     message: "The code has expired",
                 });
             }
@@ -357,6 +364,7 @@ class AuthController {
             const check = code === existingCode.code;
             if (!check) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'code',
                     message: "The code is incorrect",
                 });
             }
@@ -391,6 +399,7 @@ class AuthController {
             const { password, email } = req.body;
             if (!password || !email) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'password',
                     message: "Invalid value",
                 });
             }
@@ -401,6 +410,7 @@ class AuthController {
 
             if (!user) {
                 return res.status(STATUS.BAD_REQUEST).json({
+                    name: 'password',
                     message: "User does not exits",
                 });
             }

@@ -15,6 +15,7 @@ type AuthState = {
     isChangeLogin: boolean,
     isLoading: boolean,
     error: any,
+    toast: string | null,
     register: (values: { username: string, password: string, email: string }) => Promise<any>,
     login: (values: LoginUsernameBodyType | LoginEmailBodyType) => Promise<any>,
     logout: () => Promise<any>,
@@ -22,7 +23,12 @@ type AuthState = {
     refreshToken: (accessToken: string | null) => Promise<void>,
     setAccessToken: (accessToken: string | null) => void,
     getAccessToken: VoidFunction,
-    setChangeLogin: (isChangeLogin: boolean) => void
+    setChangeLogin: (isChangeLogin: boolean) => void,
+    setToast: (toast: string | null) => void,
+
+    forgotPassword: (email: string) => Promise<any>,
+    compareCode: (email: string, code: string) => Promise<any>,
+    updateForgotPassword: (email: string, password: string) => Promise<any>,
 }
 
 const useAuthStore = create<AuthState>((set, get) => ({
@@ -39,6 +45,7 @@ const useAuthStore = create<AuthState>((set, get) => ({
     isChangeLogin: false,
     isLoading: false,
     error: '',
+    toast: null,
 
     register: async (values) => {
         try {
@@ -130,6 +137,10 @@ const useAuthStore = create<AuthState>((set, get) => ({
         set({ isChangeLogin: isChangeLogin })
     },
 
+    setToast: (toast: string | null) => {
+        set({toast: toast})
+    },
+
     logout: async () => {
         try {
             const res = await authService.logout()
@@ -161,6 +172,47 @@ const useAuthStore = create<AuthState>((set, get) => ({
             }
         } catch (error: any) {
             set({error: error.payload})
+        }
+    },
+
+
+    forgotPassword: async(email: string) => {
+        try {
+            set({ isLoading: true })
+            const res = await authService.forgotPassword({email})
+            if(!res) return
+            return res
+        } catch (error: any) {
+            set({error: error.payload})
+        } finally{
+            set({ isLoading: false })
+        }
+    },
+
+    compareCode: async(email: string, code: string) => {
+        try {
+            set({ isLoading: true })
+            const res = await authService.comparePassword({email, code})
+            if(!res) return
+            return res
+        } catch (error: any) {
+            set({error: error.payload})
+        } finally{
+            set({ isLoading: false })
+        }
+    },
+
+    updateForgotPassword: async(email: string, password: string) => {
+        try {
+            set({ isLoading: true })
+            const res = await authService.updateForgotPassword({email, password})
+            if(!res) return
+            get().setToast('Password changed successfully')
+            return res
+        } catch (error: any) {
+            set({error: error.payload})
+        } finally{
+            set({ isLoading: false })
         }
     }
 }))

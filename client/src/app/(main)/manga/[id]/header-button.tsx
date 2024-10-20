@@ -2,7 +2,9 @@
 
 import { Button } from '@/components/ui/button'
 import { Chapter } from '@/models/manga'
+import useHomeStore from '@/stores/home.store'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 type Props = {
     listChapter: {
@@ -12,6 +14,12 @@ type Props = {
 
 const HeaderButton = ({listChapter}: Props) => {
     const router = useRouter()
+    const {reset} = useHomeStore()
+
+    useEffect(() => {
+        return () => reset()
+    }, [])
+
     const handleStartReading = () => {
         router.push('/reading-manga/' + listChapter.data[0].id)
     }

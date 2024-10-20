@@ -1,16 +1,19 @@
 'use client'
 
+import { test } from '@/context/tesr'
 import useAuthStore from '@/stores/auth.store'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import AvatarDropdown from '../common/avatar-dropdown'
 import { Search } from '../common/search'
 import { Button } from '../ui/button'
 
-type Props = {}
+type Props = {
+  isHeaderV2?: boolean
+}
 
-const Header = (props: Props) => {
+const Header = ({isHeaderV2}: Props) => {
   const router = useRouter()
   const { currentUser } = useAuthStore()
   const [isLoading, setIsLoading] = useState(true)
@@ -22,8 +25,11 @@ const Header = (props: Props) => {
     return () => clearTimeout(time)
   }, [])
 
+  if (isLoading) {
+    return <></>
+  }
   return (
-    <header className='sticky top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b-[#333333] border-b-[1px]'>
+    <header className={`${isHeaderV2 ? 'relative' : 'sticky'} top-0 z-50 border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b-[#333333] border-b-[1px]`}>
       < nav className='container h-14 flex items-center' >
         <Link href={'/'}><h1 className='text-xl font-medium'>MangaHub</h1></Link>
 

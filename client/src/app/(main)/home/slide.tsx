@@ -98,12 +98,13 @@ const SlideHome = (props: Props) => {
 
         <div className='flex justify-center mt-14'>
             <div className='container px-8 w-full'>
-                <div className=' rounded-md border-2 border-gray-200'>
+                <div className='rounded-md border-2 border-gray-200'>
                     <Image 
                         src='/image/bg_bannerpng.png'
                         width={1400}
                         height={330}
                         alt='bg-banner'
+                        priority
                         className='w-full rounded-sm'
                     />
                 </div>

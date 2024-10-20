@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import useAuthStore from "@/stores/auth.store"
+import useHomeStore from "@/stores/home.store"
 import { LoginEmailBody, LoginUsernameBody } from '@/validation/auth'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { EnvelopeClosedIcon, ReloadIcon } from "@radix-ui/react-icons"
@@ -41,6 +42,7 @@ export default FormLogin
 
 const FormUsername = ({setIsChangeAnimation}: Props) => {
   const { setChangeLogin, login, error, isLoading, initUsername } = useAuthStore()
+  const { setPath } = useHomeStore()
 
   const form = useForm<z.infer<typeof LoginUsernameBody>>({
     resolver: zodResolver(LoginUsernameBody),
@@ -50,7 +52,10 @@ const FormUsername = ({setIsChangeAnimation}: Props) => {
   async function onSubmit(values: z.infer<typeof LoginUsernameBody>) {
     const res = await login(values)
     
-    if (localStorage.getItem('token') && res) setIsChangeAnimation(true)
+    if (localStorage.getItem('token') && res) {
+      setIsChangeAnimation(true)
+      setPath('/')
+    }
   }
 
   useEffect(() => {
@@ -99,7 +104,7 @@ const FormUsername = ({setIsChangeAnimation}: Props) => {
               Remember me
             </label>
           </div>
-          <Link href={''} className='text-[--purple-cus-300] font-medium text-sm hover:opacity-90'>Forgot Password?</Link>
+          <Link href={'/forgot-password'} className='text-[--purple-cus-300] font-medium text-sm hover:opacity-90'>Forgot Password?</Link>
         </div>
         <Button variant="purple" type="submit" disabled={isLoading}>
           {isLoading ? <>
@@ -129,7 +134,7 @@ const FormUsername = ({setIsChangeAnimation}: Props) => {
 
 const FormEmail = ({setIsChangeAnimation}: Props) => {
   const { setChangeLogin, login, error, isLoading, initEmail } = useAuthStore()
-  const router = useRouter()
+  const { setPath } = useHomeStore()
 
   const form = useForm<z.infer<typeof LoginEmailBody>>({
     resolver: zodResolver(LoginEmailBody),
@@ -138,7 +143,10 @@ const FormEmail = ({setIsChangeAnimation}: Props) => {
 
   async function onSubmit(values: z.infer<typeof LoginEmailBody>) {
     const res = await login(values)
-    if (localStorage.getItem('token') && res) setIsChangeAnimation(true)
+    if (localStorage.getItem('token') && res) {
+      setIsChangeAnimation(true)
+      setPath('/')
+    }
   }
 
   useEffect(() => {
@@ -187,7 +195,7 @@ const FormEmail = ({setIsChangeAnimation}: Props) => {
               Remember me
             </label>
           </div>
-          <Link href={''} className='text-[--purple-cus-300] font-medium text-sm hover:opacity-90'>Forgot Password?</Link>
+          <Link href={'/forgot-password'} className='text-[--purple-cus-300] font-medium text-sm hover:opacity-90'>Forgot Password?</Link>
         </div>
         <Button variant="purple" type="submit" disabled={isLoading}>
           {isLoading ? <>

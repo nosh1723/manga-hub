@@ -17,19 +17,19 @@ const Card = ({ id, src, title, chapter, time, href, ref, onClick }: Props) => {
     const timeUpdated = moment(time).fromNow()
 
     return (
-        <button onClick={onClick} className='relative block overflow-hidden flex-none snap-start snap-always w-[190px] h-[280px] rounded-lg'>
+        <button onClick={onClick} className='relative block overflow-hidden flex-none snap-start snap-always w-[190px] h-[270px] rounded-lg'>
             <Image
                 src={src}
-                width={190}
-                height={270}
+                sizes='190px'
+                fill
                 alt='card'
                 placeholder="blur"
                 blurDataURL='/image/bocchi.png'
-                className='absolute w-full h-full top-0 left-0 z-10 rounded-lg'
+                className='absolute top-0 left-0 z-10 rounded-lg'
             />
 
             <div className='absolute w-full h-full top-0 left-0 z-20 bg-card_main'></div>
-            <div className='absolute z-50 w-full left-0 bottom-0 px-3 py-3'>
+            <div className='absolute z-40 w-full left-0 bottom-0 px-3 py-3'>
                 <span className='line-clamp-1 text-left'>{title}</span>
                 <div className='flex justify-between items-center text-sm mt-2'>
                     <span>Ch. {chapter || "none"}</span>

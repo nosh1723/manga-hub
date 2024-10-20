@@ -1,5 +1,4 @@
 
-import { Button } from '@/components/ui/button'
 import { updatedTime } from '@/lib/utils'
 import { ClockIcon } from '@radix-ui/react-icons'
 import Image from 'next/image'
@@ -7,6 +6,7 @@ import Link from 'next/link'
 import { getListChapter, getManga, getStatistics } from './action'
 import ListChapter from './listChapter'
 import HeaderButton from './header-button'
+import { Fragment } from 'react'
 
 type Params = {
     params: {
@@ -44,7 +44,7 @@ const DetailsManga = async ({ params }: Params) => {
                                 </div>
                                 <div className='flex flex-col gap-2'>
                                     <div className='w-[900px] flex flex-wrap items-center gap-2 mt-2'>
-                                        {manga?.attributes.tags.map((tag, index) => (<div key={index} className='flex-none px-3 bg-[--gray-cus-100] rounded-2xl text-black text-sm'>{tag.attributes.name.en}</div>))}
+                                        {manga?.attributes.tags.map((tag, index) => (<div key={index + tag.id} className='flex-none px-3 bg-[--gray-cus-100] rounded-2xl text-black text-sm'>{tag.attributes.name.en}</div>))}
 
                                     </div>
                                     <HeaderButton listChapter={listChapter}/>
@@ -63,30 +63,33 @@ const DetailsManga = async ({ params }: Params) => {
                     <div className='flex-[1]'>
                         <h2 className='text-gray-200 uppercase font-medium'>Same author</h2>
                         <div className='flex flex-col mt-3 gap-3'>
-                            {manga && manga?.mangaByAuthor?.length !== 0 && manga?.mangaByAuthor?.map(manga => (
-                                <div key={'manga-same-author' + manga.id}>
-                                    <Link
-                                        href={'/manga/' + manga.id}
-                                        className='flex gap-2'>
-                                        <Image
-                                            src={manga.coversUrl}
-                                            width={40}
-                                            height={50}
-                                            alt='bg manga same author'
-                                            className='rounded-md'
-                                            placeholder="blur"
-                                            blurDataURL='/image/bocchi.png'
-                                        />
-                                        <div className='text-gray-200 text-sm font-medium'>
-                                            <h4 className='line-clamp-2'>{manga.title.en}</h4>
-                                            <div>
-                                                <span>C. {manga.lastChapter || 'none'}</span> {" - "}
-                                                <span>{updatedTime(manga.updatedAt)}</span>
+                            {manga && manga?.mangaByAuthor?.length !== 0 && manga?.mangaByAuthor?.map((mangaAuthor, index) => {
+                                if(mangaAuthor.id === manga.id) return <Fragment key={index}></Fragment>
+                                return (
+                                    <div key={'manga-same-author' + index + mangaAuthor.id}>
+                                        <Link
+                                            href={'/manga/' + mangaAuthor.id}
+                                            className='flex gap-2'>
+                                            <Image
+                                                src={mangaAuthor.coversUrl}
+                                                width={40}
+                                                height={50}
+                                                alt='bg manga same author'
+                                                className='rounded-md'
+                                                placeholder="blur"
+                                                blurDataURL='/image/bocchi.png'
+                                            />
+                                            <div className='text-gray-200 text-sm font-medium'>
+                                                <h4 className='line-clamp-2'>{mangaAuthor.title.en}</h4>
+                                                <div>
+                                                    <span>C. {mangaAuthor.lastChapter || 'none'}</span> {" - "}
+                                                    <span>{updatedTime(mangaAuthor.updatedAt)}</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Link>
-                                </div>
-                            ))}
+                                        </Link>
+                                    </div>
+                                )
+                            })}
                         </div>
                     </div>
                 </div>
