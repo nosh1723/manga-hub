@@ -3,7 +3,7 @@ import { Manga } from "../interface/manga";
 import { mangadexAxios } from "./axios";
 
 
-export const mangaList = (limit: number, offset: number, params?: {[key: string]: string}) => mangadexAxios.get('manga', {
+export const mangaList = (limit: number, offset: number, params?: {[key: string]: any}) => mangadexAxios.get('manga', {
     params: {
         limit,
         offset,

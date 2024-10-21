@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import STATUS from "../utils/status"
-import { author, chapter, chapterImage, chapters, coverArt, manga, mangaList, statistics, tags} from "../utils/api"
-import { Attributes, Chapter, Language, Manga, Relationship } from "../interface/manga"
+import { author, chapter, chapterImage, chapters, coverArt, manga, mangaList, statistics, tags } from "../utils/api"
+import { Attributes, Chapter, Language, Manga, Relationship, Tag } from "../interface/manga"
 import { Cover, CoversArtRes, ResultCovers } from "../interface/covers"
 import { ObjectFormat } from "../interface/common"
 
@@ -18,7 +18,28 @@ class MangaController {
         return finalOrderQuery
     }
 
-    getListChapter = async(mangaId: string, params?: ObjectFormat): Promise<ListChapter | Error | undefined> => {
+    paramsTag = async (includedTagNames: Array<string>, excludedTagNames?: Array<string>) => {
+        try {
+            let excludedTagIDs
+            const getTags: Array<Tag> = (await tags()).data.data
+
+            const includedTagIDs = getTags
+                .filter(tag => includedTagNames.includes(tag.attributes.name.en))
+                .map(tag => tag.id);
+
+            if (excludedTagNames) {
+                excludedTagIDs = getTags
+                    .filter(tag => excludedTagNames.includes(tag.attributes.name.en))
+                    .map(tag => tag.id);
+
+            }
+            return { includedTagIDs, excludedTagIDs }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    getListChapter = async (mangaId: string, params?: ObjectFormat): Promise<ListChapter | Error | undefined> => {
         try {
             if (!mangaId) return
             const language = ['en']
@@ -35,9 +56,9 @@ class MangaController {
         }
     }
 
-    getAuthor = async(id: string) => {
+    getAuthor = async (id: string) => {
         try {
-            if(!id) return
+            if (!id) return
             const result = (await author(id)).data
 
             return result
@@ -47,12 +68,12 @@ class MangaController {
         }
     }
 
-    getMangaByAuthor = async(authorId: string) => {
+    getMangaByAuthor = async (authorId: string) => {
         try {
-            if(!authorId) return
+            if (!authorId) return
             const limit: number = 20
             let offset: number = 0
-            const mangaByAuthor = (await mangaList(limit, offset, {authorOrArtist: authorId})).data
+            const mangaByAuthor = (await mangaList(limit, offset, { authorOrArtist: authorId })).data
 
             const listCoversUrl: Array<CoversArtRes> | any = await this.getListCoversArt(mangaByAuthor?.data)
             const result = await Promise.all(mangaByAuthor?.data.map(async (manga: Manga) => {
@@ -73,7 +94,7 @@ class MangaController {
         }
     }
 
-    getCoversArt = async(manga: Manga) => {
+    getCoversArt = async (manga: Manga) => {
         try {
             if (!manga) return
             const coverId = manga?.relationships?.find(author => author.type === "cover_art")?.id
@@ -81,7 +102,7 @@ class MangaController {
 
             if (!res) return
 
-            const coverUrl= {
+            const coverUrl = {
                 mangaId: manga.id,
                 coversUrl: `https://uploads.mangadex.org/covers/${manga.id}/${res.attributes.fileName}`
             }
@@ -133,7 +154,7 @@ class MangaController {
 
     getLastUpdateManga = async (req: Request, res: Response) => {
         try {
-            const limit: number = 16
+            const limit: number = 15
             const offset: number = 0
             const order = this.orderParams({ updatedAt: 'desc' }, {})
 
@@ -145,7 +166,7 @@ class MangaController {
                 return {
                     id: manga.id,
                     title: manga.attributes.title,
-                    lastChapter: chapter.data[0]?.attributes.chapter ,
+                    lastChapter: chapter.data[0]?.attributes.chapter,
                     updatedAt: manga.attributes.updatedAt,
                     coversUrl
                 }
@@ -169,7 +190,7 @@ class MangaController {
             const authorId = getManga?.relationships?.find(re => re.type === 'author')?.id
             const author = await this.getAuthor(authorId as string)
             const mangaByAuthor = await this.getMangaByAuthor(authorId as string)
-            
+
             const coverUrl: any = await this.getCoversArt(getManga)
 
             const result = {
@@ -198,7 +219,47 @@ class MangaController {
         }
     }
 
-    listChapter = async(req: Request, res: Response) => {
+    getMangaByTag = async (req: Request, res: Response) => {
+        try {
+            const { includedTags, excludedTags } = req.body
+            const includedTagNames = includedTags
+            const excludedTagNames = excludedTags || undefined
+            const limit: number = 15
+            const offset: number = 0
+
+            const idTag = await this.paramsTag(includedTagNames, excludedTagNames)
+            const params = {
+                includedTags: idTag?.includedTagIDs,
+                excludedTags: idTag?.excludedTagIDs
+            }
+
+            const resAllManga = (await mangaList(limit, offset, {...params})).data
+
+            const listCoversUrl: Array<CoversArtRes> | any = await this.getListCoversArt(resAllManga?.data)
+            const result = await Promise.all(resAllManga?.data.map(async (manga: Manga) => {
+                const coversUrl = listCoversUrl.find((covers: CoversArtRes) => covers.mangaId === manga.id).coversUrl
+                const chapter: any = await this.getListChapter(manga.id)
+                return {
+                    id: manga.id,
+                    title: manga.attributes.title,
+                    lastChapter: chapter.data[0]?.attributes.chapter,
+                    updatedAt: manga.attributes.updatedAt,
+                    coversUrl
+                }
+            }))
+
+
+            return res.status(STATUS.OK).json({
+                status: STATUS.OK,
+                data: result
+            })
+        } catch (error: any) {
+            console.log(error);
+            return res.status(STATUS.INTERNAL).json(error)
+        }
+    }
+
+    listChapter = async (req: Request, res: Response) => {
         try {
             const { mangaId } = req.body
             const chapter: any = await this.getListChapter(mangaId)
@@ -213,7 +274,7 @@ class MangaController {
         }
     }
 
-    getChapter = async(req: Request, res: Response) =>  {
+    getChapter = async (req: Request, res: Response) => {
         try {
             const { id } = req.params
             const getChapter: any = (await chapter(id)).data.data
@@ -239,7 +300,7 @@ class MangaController {
         }
     }
 
-    statistics = async(req: Request, res: Response) => {
+    statistics = async (req: Request, res: Response) => {
         try {
             const { id } = req.params
             const result = (await statistics(id)).data
@@ -253,7 +314,7 @@ class MangaController {
         }
     }
 
-    getChapterImages = async(req: Request, res: Response) => {
+    getChapterImages = async (req: Request, res: Response) => {
         try {
             const { id } = req.params
             const result = (await chapterImage(id)).data
@@ -267,7 +328,7 @@ class MangaController {
         }
     }
 
-    getAllTag = async(req: Request, res: Response) => {
+    getAllTag = async (req: Request, res: Response) => {
         try {
             const result = (await tags()).data.data
             return res.status(STATUS.OK).json({

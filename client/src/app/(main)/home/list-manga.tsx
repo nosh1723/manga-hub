@@ -45,7 +45,9 @@ const ListManga = (props: Props) => {
   };
 
   useEffect(() => {
-    getListLatestManga()
+    if(!listLatestManga) {
+      getListLatestManga()
+    }
   }, [])
 
   return (

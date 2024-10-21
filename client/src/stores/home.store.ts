@@ -29,7 +29,7 @@ const useHomeStore = create<MangaState>((set, get) => ({
         set({
             isLoading: false,
             error: '',
-            path: ''
+            path: '',
         })
     }
 

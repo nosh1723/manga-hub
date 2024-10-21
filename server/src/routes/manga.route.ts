@@ -12,5 +12,6 @@ mangaRoute.get('/chapter/:id', mangaController.getChapter)
 mangaRoute.get('/tag', mangaController.getAllTag)
 
 mangaRoute.post('/chapters', mangaController.listChapter)
+mangaRoute.post('/manga-by-tag', mangaController.getMangaByTag)
 
 export default mangaRoute
