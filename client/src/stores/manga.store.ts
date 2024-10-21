@@ -1,4 +1,4 @@
-import { Manga, MangaLatestResult } from "@/models/manga"
+import { Manga, MangaLatestResult, Tag } from "@/models/manga"
 import mangaService from "@/services/manga"
 import { create } from "zustand"
 
@@ -8,9 +8,11 @@ type MangaState = {
     error: any,
     lazyLoad: boolean,
     manga: Manga | null,
+    tags: Array<Tag> | null
     listLatestManga: Array<MangaLatestResult> | null,
     getListLatestManga: () => Promise<void>,
     getManga: (id: string) => Promise<void> | null,
+    getTags: () => Promise<void> | null,
     setLazyLoad: (lazyLoad: boolean) => void
 }
 
@@ -20,6 +22,7 @@ const useMangaStore = create<MangaState>((set, get) => ({
     error: '',
     lazyLoad: true,
     manga: null,
+    tags: null,
 
     getListLatestManga: async() => {
         try {
@@ -41,6 +44,19 @@ const useMangaStore = create<MangaState>((set, get) => ({
             const res = await mangaService.manga(id)
 
             set({manga: res.payload.data})
+        } catch (error: any) {
+            set({error: error.payload})
+        } finally{
+            set({isLoading: false})
+        }
+    },
+
+    getTags: async() => {
+        try {
+            set({isLoading: true})
+            const res = await mangaService.tags()
+
+            set({tags: res.payload.data})
         } catch (error: any) {
             set({error: error.payload})
         } finally{

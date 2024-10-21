@@ -1,6 +1,7 @@
 import moment from 'moment'
 import Image from 'next/image'
 import { LegacyRef } from 'react'
+import { motion } from 'framer-motion'
 
 type Props = {
     id: string,
@@ -10,14 +11,22 @@ type Props = {
     time?: string,
     href: string,
     ref?: LegacyRef<HTMLAnchorElement>,
-    onClick?: VoidFunction
+    onClick?: VoidFunction,
+    delay: number
 }
 
-const Card = ({ id, src, title, chapter, time, href, ref, onClick }: Props) => {
+const Card = ({ id, src, title, chapter, time, delay, onClick }: Props) => {
     const timeUpdated = moment(time).fromNow()
 
     return (
-        <button onClick={onClick} className='relative block overflow-hidden flex-none snap-start snap-always w-[190px] h-[270px] rounded-lg'>
+        <motion.div
+            key={'card manga'}
+            initial={{y: -40, x: -20, opacity: .5}}
+            animate={{y: 0, x: 0, opacity: 1}}
+            transition={{delay: delay}}
+            onClick={onClick}
+            className='relative cursor-pointer overflow-hidden flex-none snap-start snap-always w-[190px] h-[270px] rounded-lg'
+        >
             <Image
                 src={src}
                 sizes='190px'
@@ -36,7 +45,7 @@ const Card = ({ id, src, title, chapter, time, href, ref, onClick }: Props) => {
                     <span>{timeUpdated || "..."}</span>
                 </div>
             </div>
-        </button>
+        </motion.div>
     )
 }
 

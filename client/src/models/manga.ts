@@ -10,6 +10,7 @@ export interface Tag {
     attributes: {
         name: Language,
         description: Language,
+        group: string
     }
 }
 

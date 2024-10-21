@@ -9,14 +9,17 @@ import { toast } from 'sonner'
 type Props = {}
 
 const AuthLayout = ({ children }: LayoutProps) => {
-  const { toast: isToast } = useAuthStore()
+  const { toast: isToast, setToast } = useAuthStore()
 
   useEffect(() => {
-    if(isToast) toast.success(isToast)
+    if(isToast) {
+      toast.success(isToast)
+      setToast('')
+    }
   }, [isToast])
   return (
     <div className='relative w-screen h-screen pt-36 sm:pt-0 flex flex-col sm:justify-center '>
-      <Link href={'/'} className='text-center text-[32px] font-bold hover:underline'>MangaHub</Link>
+      <div className='text-center text-[32px] font-bold '><Link href={'/'} className='hover:underline'>MangaHub</Link></div>
       <div className='mt-5 flex justify-center'>
         {children}
       </div>

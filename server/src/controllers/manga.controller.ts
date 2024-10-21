@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import STATUS from "../utils/status"
-import { author, chapter, chapterImage, chapters, coverArt, manga, mangaList, statistics } from "../utils/api"
+import { author, chapter, chapterImage, chapters, coverArt, manga, mangaList, statistics, tags} from "../utils/api"
 import { Attributes, Chapter, Language, Manga, Relationship } from "../interface/manga"
 import { Cover, CoversArtRes, ResultCovers } from "../interface/covers"
 import { ObjectFormat } from "../interface/common"
@@ -76,7 +76,7 @@ class MangaController {
     getCoversArt = async(manga: Manga) => {
         try {
             if (!manga) return
-            const coverId = manga.relationships.find(author => author.type === "cover_art")?.id
+            const coverId = manga?.relationships?.find(author => author.type === "cover_art")?.id
             const res: Cover = (await coverArt(coverId as string)).data.data
 
             if (!res) return
@@ -166,7 +166,7 @@ class MangaController {
             const getManga = (await manga(id)).data.data as Manga
             const attributes: Attributes = getManga.attributes
 
-            const authorId = getManga.relationships.find(re => re.type === 'author')?.id
+            const authorId = getManga?.relationships?.find(re => re.type === 'author')?.id
             const author = await this.getAuthor(authorId as string)
             const mangaByAuthor = await this.getMangaByAuthor(authorId as string)
             
@@ -257,6 +257,19 @@ class MangaController {
         try {
             const { id } = req.params
             const result = (await chapterImage(id)).data
+            return res.status(STATUS.OK).json({
+                status: STATUS.OK,
+                data: result
+            })
+        } catch (error: any) {
+            console.log(error);
+            return res.status(STATUS.INTERNAL).json(error)
+        }
+    }
+
+    getAllTag = async(req: Request, res: Response) => {
+        try {
+            const result = (await tags()).data.data
             return res.status(STATUS.OK).json({
                 status: STATUS.OK,
                 data: result

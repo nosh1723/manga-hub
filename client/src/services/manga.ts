@@ -1,5 +1,5 @@
 import http from "@/lib/http"
-import { Chapter, ChapterBody, ChapterImage, Manga, Statistics } from "@/models/manga"
+import { Chapter, ChapterBody, ChapterImage, Manga, Statistics, Tag } from "@/models/manga"
 
 const mangaService = {
     latestManga: () => http.get('manga-dex/latest-manga'),
@@ -8,6 +8,7 @@ const mangaService = {
     statistics: (id: string) => http.get<{data: Statistics}>('manga-dex/statistics/' + id),
     chapterImages: (id: string) => http.get<{data: ChapterImage}>('manga-dex/chapter-image/' + id),
     chapter: (id: string) => http.get<{data: {getChapter: Chapter, manga: Manga}}>('manga-dex/chapter/' + id),
+    tags: () => http.get<{data: Array<Tag>}>('manga-dex/tag'),
 }
 
 export default mangaService
