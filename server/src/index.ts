@@ -20,7 +20,7 @@ app.use(
   cors({
     origin: [
       process.env.CLIENT_URL!,
-      "http://localhost:3000",
+      "https://manga-hub-eight.vercel.app",
     ],
     credentials: true,
   })

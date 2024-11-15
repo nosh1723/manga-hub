@@ -8,7 +8,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar"
 import { User } from "@/models/user"
 import useAuthStore from "@/stores/auth.store"
 import { useRouter } from "next/navigation"

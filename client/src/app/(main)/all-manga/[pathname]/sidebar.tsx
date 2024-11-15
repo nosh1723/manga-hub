@@ -1,30 +1,26 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Tag } from "@/models/manga";
 import useMangaStore from "@/stores/manga.store";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { MdFilterAlt } from "react-icons/md";
 
-type Props = {}
+type Props = {
+    pathname: string
+}
 
-const PATH_NAME = [
-    { path: '/latest-updates', value: 'Latest Updates' },
-    { path: '/mangas', value: 'All Manga' },
-]
-
-const SideBar = (props: Props) => {
-    const { getTags, tags, getMangaByTag } = useMangaStore()
+const SideBar = ({ pathname }: Props) => {
+    const { getTags, tags, getMangaByTag} = useMangaStore()
     const [includedTags, setIncludedTags] = useState<Array<string>>([])
-
 
     let delay = 0
 
     useEffect(() => {
-        getTags()
+        if (!tags) {
+            getTags()
+        }
     }, [])
 
     const handleGetTag = (tag: string) => {
@@ -40,7 +36,7 @@ const SideBar = (props: Props) => {
 
     const handleFilterByTag = async () => {
         if (includedTags.length > 0) {
-            getMangaByTag(includedTags)
+            await getMangaByTag(includedTags)
         }
     }
 

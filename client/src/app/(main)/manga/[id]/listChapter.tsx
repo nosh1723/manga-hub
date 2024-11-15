@@ -13,7 +13,7 @@ const ListChapter = ({ listChapter }: Props) => {
         <>
             <div className='mt-10 max-h-[436px] overflow-y-auto scroll-smooth custom-scrollbar'>
                 <div className='flex flex-col gap-1'>
-                    {listChapter.data?.map((chapter, index) => {
+                    {listChapter?.data?.map((chapter, index) => {
                         return <Link key={index + chapter.id} href={'/reading-manga/' + chapter.id} className={`px-4 py-2 overflow-hidden ${index % 2 === 0 ? "bg-gray-50" : "bg-gray-100"} flex items-center justify-between gap-3 hover:opacity-70`}>
                             <div className='flex gap-2'>
                                 <h3 className='uppercase text-md font-bold'>chap {chapter.attributes.chapter}</h3>

@@ -114,7 +114,7 @@ const FormUsername = ({setIsChangeAnimation}: Props) => {
         </Button>
 
         <p className="flex justify-center text-sm !mt-5">Or Continue With</p>
-        <div className="!mt-5 flex gap-2">
+        <div className="!mt-5 flex flex-col xl:flex-row gap-2">
           <Button variant="gray" className="bg-[#F7EFE5] gap-2 rounded-sm">
             <FaGoogle className="mt-[1px]" /> Sign up with Google
           </Button>
@@ -205,7 +205,7 @@ const FormEmail = ({setIsChangeAnimation}: Props) => {
         </Button>
 
         <p className="flex justify-center text-sm !mt-5">Or Continue With</p>
-        <div className="!mt-5 flex gap-2">
+        <div className="!mt-5 flex flex-col xl:flex-row gap-2">
           <Button variant="gray" className="bg-[#F7EFE5] gap-2 rounded-sm">
             <FaGoogle className="mt-[1px]" /> Sign up with Google
           </Button>

@@ -1,6 +1,6 @@
 'use client'
 import Footer from '@/components/layout/footer'
-import Header from '@/components/layout/header'
+import Header from '@/components/layout/header/header'
 import Loading from '@/components/layout/loading'
 import { LayoutProps } from '@/models'
 import useHomeStore from '@/stores/home.store'

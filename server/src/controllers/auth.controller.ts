@@ -137,8 +137,8 @@ class AuthController {
                 maxAge: 1000 * 60 * 24 * 60 * 60, // 60d
                 httpOnly: true,
                 path: "/",
-                secure: false,      // Chỉ hoạt động qua HTTPS
-                sameSite: 'lax'
+                secure: false,     // Chỉ hoạt động qua HTTPS
+                sameSite: 'lax' // local = lax | https = none
             });
 
             delete user._doc.password;

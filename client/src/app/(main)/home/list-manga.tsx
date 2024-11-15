@@ -52,7 +52,7 @@ const ListManga = (props: Props) => {
 
   return (
     <>
-      <div className='flex justify-between items-center mb-8'>
+      <div className='flex justify-between items-center mb-6 md:mb-8'>
         <motion.h2
           initial={{ y: -40 }}
           animate={{ y: 0 }}
@@ -63,7 +63,7 @@ const ListManga = (props: Props) => {
           animate={{ y: 0 }}
           transition={{ delay: .6 }}
           className='flex gap-1 items-center cursor-pointer hover:underline'>
-          <Link href={'/latest-updates'}>See more</Link>
+          <Link href={'/all-manga/latest-updates'}>View All</Link>
           <FaChevronRight size={12} />
         </motion.div>
       </div>

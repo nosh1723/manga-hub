@@ -140,25 +140,18 @@ class MangaController {
         }
     }
 
-    getAllManga = async (req: Request, res: Response) => {
+    getListManga = async (req: Request, res: Response) => {
         try {
-            const limit: number = 20
-            let offset: number = 0
-            const resAllManga = await mangaList(limit, offset)
-            const result = await resAllManga.data
-            return res.status(STATUS.OK).json({ ...result })
-        } catch (error: any) {
-            return res.status(STATUS.INTERNAL).json(error)
-        }
-    }
-
-    getLastUpdateManga = async (req: Request, res: Response) => {
-        try {
+            const { title } = req.params
             const limit: number = 15
             const offset: number = 0
-            const order = this.orderParams({ updatedAt: 'desc' }, {})
+            const order = title ? null : this.orderParams({ updatedAt: 'desc' }, {})
+            const params = {
+                ...order,
+                title: title || ''
+            }
 
-            const resAllManga = (await mangaList(limit, offset, { ...order })).data
+            const resAllManga = (await mangaList(limit, offset, { ...params })).data
             const listCoversUrl: Array<CoversArtRes> | any = await this.getListCoversArt(resAllManga?.data)
             const result = await Promise.all(resAllManga?.data.map(async (manga: Manga) => {
                 const coversUrl = listCoversUrl.find((covers: CoversArtRes) => covers.mangaId === manga.id).coversUrl
@@ -208,6 +201,7 @@ class MangaController {
                 author,
                 mangaByAuthor
             }
+            
 
             return res.status(STATUS.OK).json({
                 status: STATUS.OK,

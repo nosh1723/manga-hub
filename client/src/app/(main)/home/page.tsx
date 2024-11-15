@@ -8,7 +8,7 @@ const HomePage = (props: Props) => {
     <div className='relative h-full'>
       <SlideHome />
 
-      <div className='container py-20 px-24 '>
+      <div className='container py-8 lg:py-20 lg:px-24 md:py-14 md:px-16'>
         <ListManga />
       </div>
     </div>

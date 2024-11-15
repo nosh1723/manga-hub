@@ -24,9 +24,9 @@ const HeaderButton = ({listChapter}: Props) => {
         router.push('/reading-manga/' + listChapter.data[0].id)
     }
     return (
-        <div className='flex mt-3 gap-2'>
-            <Button variant={'purple'} className='w-max px-5 py-[6px] text-sm h-auto'>Follow</Button>
-            <Button onClick={handleStartReading} variant={'gray'} className='w-max px-5 py-[6px] text-sm h-auto bg-[#F6B17A] text-gray-900'>Start Reading</Button>
+        <div className='flex flex-col md:flex-row mt-3 gap-2'>
+            <Button variant={'purple'} className='w-full md:w-max px-5 py-[6px] text-sm h-auto'>Follow</Button>
+            <Button onClick={handleStartReading} variant={'gray'} className='w-full md:w-max px-5 py-[6px] text-sm h-auto bg-[#F6B17A] text-gray-900'>Start Reading</Button>
         </div>
     )
 }

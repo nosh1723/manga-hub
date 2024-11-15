@@ -7,6 +7,7 @@ import { revalidateTag } from "next/cache";
 
 export const getManga = async(id: string) => {
     try {
+        revalidateTag('manga')
         const res = await mangaService.manga(id)
         if(res) return res.payload.data
     } catch (error) {

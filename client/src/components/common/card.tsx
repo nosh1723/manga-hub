@@ -25,11 +25,10 @@ const Card = ({ id, src, title, chapter, time, delay, onClick }: Props) => {
             animate={{y: 0, x: 0, opacity: 1}}
             transition={{delay: delay}}
             onClick={onClick}
-            className='relative cursor-pointer overflow-hidden flex-none snap-start snap-always w-[190px] h-[270px] rounded-lg'
+            className='relative cursor-pointer overflow-hidden flex-none snap-start snap-always w-[135px] h-[200px] lg:w-[190px] lg:h-[270px] rounded-lg'
         >
             <Image
                 src={src}
-                sizes='190px'
                 fill
                 alt='card'
                 placeholder="blur"
@@ -38,9 +37,9 @@ const Card = ({ id, src, title, chapter, time, delay, onClick }: Props) => {
             />
 
             <div className='absolute w-full h-full top-0 left-0 z-20 bg-card_main'></div>
-            <div className='absolute z-40 w-full left-0 bottom-0 px-3 py-3'>
-                <span className='line-clamp-1 text-left'>{title}</span>
-                <div className='flex justify-between items-center text-sm mt-2'>
+            <div className='absolute z-40 w-full left-0 bottom-0 px-1 py-1 lg:px-3 lg:py-3 md:px-2 md:py-2'>
+                <span className='line-clamp-2 text-sm md:text-base md:line-clamp-1 text-left'>{title}</span>
+                <div className='flex justify-between items-center text-xs lg:text-sm lg:mt-2'>
                     <span>Ch. {chapter || "none"}</span>
                     <span>{timeUpdated || "..."}</span>
                 </div>

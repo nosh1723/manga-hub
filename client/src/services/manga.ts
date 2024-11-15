@@ -10,6 +10,7 @@ const mangaService = {
     chapter: (id: string) => http.get<{data: {getChapter: Chapter, manga: Manga}}>('manga-dex/chapter/' + id),
     tags: () => http.get<{data: Array<Tag>}>('manga-dex/tag'),
     mangaByTags: (body: {includedTags: Array<string>, excludedTags?: Array<string>}) => http.post<{data: Array<MangaLatestResult>}>('manga-dex/manga-by-tag', body),
+    mangaByTitles: (title: string) => http.get<{data: Array<MangaLatestResult>}>('manga-dex/manga-by-title/' + title),
 }
 
 export default mangaService

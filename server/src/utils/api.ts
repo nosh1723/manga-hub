@@ -1,5 +1,4 @@
 import { ObjectFormat } from "../interface/common";
-import { Manga } from "../interface/manga";
 import { mangadexAxios } from "./axios";
 
 
