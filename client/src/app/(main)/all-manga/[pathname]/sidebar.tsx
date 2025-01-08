@@ -2,11 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import useLimit from "@/hooks/use-limit";
-import useWindowSize from "@/hooks/use-window-size";
 import useMangaStore from "@/stores/manga.store";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect } from "react";
 import { MdFilterAlt } from "react-icons/md";
 
 type Props = {
