@@ -18,7 +18,7 @@ type Props = {
 
 const Header = ({ isHeaderV2 }: Props) => {
   const router = useRouter()
-  const { width } = useWindowSize()
+  const { mobile } = useWindowSize()
   const { currentUser } = useAuthStore()
   const [isLoading, setIsLoading] = useState(true)
 
@@ -42,7 +42,7 @@ const Header = ({ isHeaderV2 }: Props) => {
         <Link href={'/'}><h1 className='text-lg md:text-xl font-medium'>MangaHub</h1></Link>
 
         <div className='flex flex-1 gap-3 md:gap-5 justify-end items-center'>
-          {width! < 640 ? 
+          {mobile ? 
           <SheetSide/> : <SearchBarHeader />} 
           {currentUser ? <AvatarDropdown currentUser={currentUser} /> :
             <Button

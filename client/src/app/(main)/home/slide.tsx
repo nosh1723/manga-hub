@@ -1,12 +1,10 @@
 'use client'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import useWindowSize from '@/hooks/use-window-size'
 
 type Props = {}
 
 const SlideHome = (props: Props) => {
-    const { width } = useWindowSize()
     return (
         <motion.div
             key={'slide'}
@@ -15,19 +13,16 @@ const SlideHome = (props: Props) => {
                 y: 0
             }}
             transition={{delay: .3}}
-            className='flex justify-center mt-10 md:mt-14'>
-            <div className='container px-8 w-full'>
-                <div className='rounded-md border-2 border-gray-200'>
+            className='container flex justify-center mt-10 md:mt-14'>
+                <div className='relative flex-none w-[364px] md:w-[calc(100%-2rem)] h-[261px] md:h-[180px] lg:h-[280px] 2xl:h-[330px] rounded-md border-2 border-gray-200'>
                     <Image
-                        src={width! < 640 ? '/image/bg_bannerpng_mobile.png' : '/image/bg_bannerpng.png'}
-                        width={1400}
-                        height={330}
+                        src={'/image/bg_bannerpng_mobile.png'}
+                        fill
                         alt='bg-banner'
                         priority
-                        className='w-full rounded-sm'
+                        className='object-top object-contain md:object-cover rounded-sm'
                     />
                 </div>
-            </div>
         </motion.div>
     )
 }
