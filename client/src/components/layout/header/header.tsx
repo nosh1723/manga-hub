@@ -1,15 +1,14 @@
 'use client'
 
-import useAuthStore from '@/stores/auth.store'
-import Link from 'next/link'
-import AvatarDropdown from './avatar-dropdown'
-import SearchBarHeader from './search-bar-header'
 import useWindowSize from '@/hooks/use-window-size'
+import useAuthStore from '@/stores/auth.store'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Button } from '../../ui/button'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import AvatarDropdown from './avatar-dropdown'
+import SearchBarHeader from './search-bar-header'
 import { SheetSide } from './top-sheet'
 
 type Props = {
