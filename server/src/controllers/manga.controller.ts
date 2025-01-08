@@ -116,14 +116,20 @@ class MangaController {
     getListCoversArt = async (data: Array<Manga>) => {
         try {
             if (!data) return
-            const resultCovers: Array<ResultCovers> = await Promise.all(data.map(async (i) => {
-                const coverId = i.relationships.find(author => author.type === "cover_art")?.id
-                const res: Cover = (await coverArt(coverId as string)).data.data
-                return {
-                    fileName: res.attributes.fileName,
-                    mangaId: i.id
+
+            // chat gpt 😂
+            const resultCovers: Array<ResultCovers> = [];
+            for (const i of data) {
+                const coverId = i.relationships.find(author => author.type === "cover_art")?.id;
+
+                if (coverId) {
+                    const res: Cover = (await coverArt(coverId)).data.data;
+                    resultCovers.push({
+                        fileName: res.attributes.fileName,
+                        mangaId: i.id,
+                    });
                 }
-            }))
+            }
 
             if (!resultCovers) return
 
@@ -135,16 +141,16 @@ class MangaController {
             })
             return listCoversUrl
         } catch (error: any) {
-            console.log(error);
-            return new Error(error)
+            console.log('getListCoversArt error');
+            // return new Error(error)
         }
     }
 
     getListManga = async (req: Request, res: Response) => {
         try {
-            const { title } = req.params
-            const limit: number = 15
-            const offset: number = 0
+            const { reLimit, page, title } = req.body
+            const limit: number = reLimit ? reLimit : 15
+            const offset: number = page ? limit * parseInt(page) : 0
             const order = title ? null : this.orderParams({ updatedAt: 'desc' }, {})
             const params = {
                 ...order,
@@ -153,24 +159,36 @@ class MangaController {
 
             const resAllManga = (await mangaList(limit, offset, { ...params })).data
             const listCoversUrl: Array<CoversArtRes> | any = await this.getListCoversArt(resAllManga?.data)
-            const result = await Promise.all(resAllManga?.data.map(async (manga: Manga) => {
-                const coversUrl = listCoversUrl.find((covers: CoversArtRes) => covers.mangaId === manga.id).coversUrl
-                const chapter: any = await this.getListChapter(manga.id)
-                return {
+
+            // chat gpt 😂
+            const result: Array<any> = [];
+            for (const manga of resAllManga?.data) {
+                const covers = listCoversUrl.find((covers: CoversArtRes) => covers.mangaId === manga.id)?.coversUrl;
+
+                const chapter: any = await this.getListChapter(manga.id);
+
+                result.push({
                     id: manga.id,
                     title: manga.attributes.title,
                     lastChapter: chapter.data[0]?.attributes.chapter,
                     updatedAt: manga.attributes.updatedAt,
-                    coversUrl
-                }
-            }))
+                    coversUrl: covers,
+                });
+            }
+
             return res.status(STATUS.OK).json({
                 status: STATUS.OK,
-                data: result
+                data: result,
+                total: resAllManga?.total
             })
         } catch (error: any) {
-            console.log(error);
-            return res.status(STATUS.INTERNAL).json(error)
+            console.log('get list manga error');
+            if (error.isAxiosError) {
+                res.status(STATUS.INTERNAL).json({ message: 'An unexpected error occurred.', error: error.code });
+                return
+            }
+
+            res.status(STATUS.INTERNAL).json({ message: 'An unexpected error occurred.', error});
         }
     }
 
@@ -201,7 +219,7 @@ class MangaController {
                 author,
                 mangaByAuthor
             }
-            
+
 
             return res.status(STATUS.OK).json({
                 status: STATUS.OK,
@@ -215,11 +233,11 @@ class MangaController {
 
     getMangaByTag = async (req: Request, res: Response) => {
         try {
-            const { includedTags, excludedTags } = req.body
+            const { includedTags, excludedTags, reLimit, page } = req.body
+            const limit: number = reLimit ? reLimit : 15
+            const offset: number = page ? limit * parseInt(page) : 0
             const includedTagNames = includedTags
             const excludedTagNames = excludedTags || undefined
-            const limit: number = 15
-            const offset: number = 0
 
             const idTag = await this.paramsTag(includedTagNames, excludedTagNames)
             const params = {
@@ -227,7 +245,7 @@ class MangaController {
                 excludedTags: idTag?.excludedTagIDs
             }
 
-            const resAllManga = (await mangaList(limit, offset, {...params})).data
+            const resAllManga = (await mangaList(limit, offset, { ...params })).data
 
             const listCoversUrl: Array<CoversArtRes> | any = await this.getListCoversArt(resAllManga?.data)
             const result = await Promise.all(resAllManga?.data.map(async (manga: Manga) => {
@@ -245,7 +263,8 @@ class MangaController {
 
             return res.status(STATUS.OK).json({
                 status: STATUS.OK,
-                data: result
+                data: result,
+                total: resAllManga?.total
             })
         } catch (error: any) {
             console.log(error);

@@ -6,7 +6,7 @@ import { debounce, updatedTime } from '@/lib/utils'
 import useMangaStore from '@/stores/manga.store'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { motion } from 'framer-motion'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { MangaLatestResult } from '@/models/manga'
 import useHomeStore from '@/stores/home.store'
 
@@ -14,6 +14,7 @@ type Props = {}
 
 const SearchBarHeader = (props: Props) => {
     const router = useRouter()
+    const pathName = usePathname()
     const { getMangaByTitle, isLoadingMangaByTitle } = useMangaStore()
     const { setIsLoading, setPath } = useHomeStore()
 
@@ -37,15 +38,15 @@ const SearchBarHeader = (props: Props) => {
         };
     }, []);
 
-    const handleChangeSearch = debounce(async (e: ChangeEvent<HTMLInputElement>) => {
+    const handleChangeSearch = debounce(async (e: ChangeEvent<HTMLInputElement>) => {        
         const res = await getMangaByTitle(e.target.value)
-        setData(res)
+        setData(res.data)
         setValue(e.target.value)
     }, 300)
 
     const handleLoadMore = () => {
         if (searchInputRef.current && value !== '' && data) {
-            router.push('/all-manga/' + value)
+            router.replace('/all-manga?title=' + value)
             searchInputRef.current.blur()
             searchInputRef.current.value = ''
             setIsListVisible(false)

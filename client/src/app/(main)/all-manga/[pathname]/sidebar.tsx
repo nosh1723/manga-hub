@@ -1,6 +1,8 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
+import useLimit from "@/hooks/use-limit";
+import useWindowSize from "@/hooks/use-window-size";
 import useMangaStore from "@/stores/manga.store";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
@@ -8,12 +10,11 @@ import { Fragment, useEffect, useState } from "react";
 import { MdFilterAlt } from "react-icons/md";
 
 type Props = {
-    pathname: string
 }
 
-const SideBar = ({ pathname }: Props) => {
-    const { getTags, tags, getMangaByTag} = useMangaStore()
-    const [includedTags, setIncludedTags] = useState<Array<string>>([])
+const SideBar = (props: Props) => {
+    const {limit} = useLimit()
+    const { getTags, tags, getMangaByTag, includedTags, setIncludedTags} = useMangaStore()
 
     let delay = 0
 
@@ -36,12 +37,14 @@ const SideBar = ({ pathname }: Props) => {
 
     const handleFilterByTag = async () => {
         if (includedTags.length > 0) {
-            await getMangaByTag(includedTags)
+            // await getMangaByTag(includedTags)
+            
+            await getMangaByTag(includedTags, [], 0, limit)
         }
     }
 
     return (
-        <div className="flex-1 h-max bg-[--gray-cus-600] rounded-md pb-4 px-0">
+        <div className="flex-[2] lg:flex-[1.5] xl:flex-1 h-max bg-[--gray-cus-600] rounded-md lg:mr-2 xl:mr-0 pb-4 px-0">
             <div className="flex justify-between items-center border-b-2 border-b-[--gray-cus-400] py-[10px] px-4">
                 <div className="flex gap-1 items-center ">
                     <MdFilterAlt size={18} className="-mt-[2px]" />
@@ -51,7 +54,7 @@ const SideBar = ({ pathname }: Props) => {
                     <MagnifyingGlassIcon />
                 </Button>
             </div>
-            <div className="px-3 mt-2 mx-1 overflow-y-auto scroll-smooth custom-scrollbar custom-scrollbar-tag h-[520px]">
+            <div className="px-3 mt-2 mx-1 overflow-y-auto scroll-smooth custom-scrollbar custom-scrollbar-tag h-[230px] md:h-[520px]">
 
                 <div className="py-2">
                     <h4>Genre</h4>

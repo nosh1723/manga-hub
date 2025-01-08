@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { cva, type VariantProps } from "class-variance-authority"
 
 const LoadingDot = {
   display: "block",
@@ -45,10 +46,13 @@ const DotTransition = {
     ease: "easeInOut"
 };
 
-export default function Loading() {
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {}
+
+const Loading: React.FC<ButtonProps> = ({ className }) => {
   return (
-    <div className="flex items-end justify-center w-full">
-        <span>Loading</span>
+    <div className={`flex items-end justify-center w-full ${className}`}>
+      <span>Loading</span>
       <motion.div
         style={LoadingContainer}
         variants={ContainerVariants}
@@ -73,4 +77,7 @@ export default function Loading() {
       </motion.div>
     </div>
   );
-}
+};
+
+Loading.displayName = "LoadingMangas";
+export default Loading;

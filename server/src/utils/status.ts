@@ -6,6 +6,7 @@ const STATUS = {
   INTERNAL: 500,
   OK: 200,
   CREATED: 201,
+  ECONNABORTED: 504 // timeout
 };
 
 export default STATUS;

@@ -1,22 +1,34 @@
 import { useState, useEffect } from 'react';
 
 interface WindowSize {
-  width: number | undefined;
-  height: number | undefined;
+  desktop: boolean;
+  laptop: boolean;
+  laptop_l: boolean;
+  tablet: boolean;
+  mobile: boolean;
 }
 
 function useWindowSize(): WindowSize {
   const [windowSize, setWindowSize] = useState<WindowSize>({
-    width: undefined,
-    height: undefined,
+    desktop: false,
+    laptop: false,
+    laptop_l: false,
+    tablet: false,
+    mobile: false,
   });
 
   useEffect(() => {
     function handleResize() {
+      const width = window.innerWidth;
+
       setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
+        mobile: width < 768,
+        tablet: width >= 768 && width < 1024,
+        laptop: width >= 1024 && width < 1440,
+        laptop_l: width >= 1440 && width < 1920,
+        desktop: width >= 1920,
       });
+      
     }
 
     window.addEventListener('resize', handleResize);
@@ -25,7 +37,7 @@ function useWindowSize(): WindowSize {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  
   return windowSize;
 }
 
