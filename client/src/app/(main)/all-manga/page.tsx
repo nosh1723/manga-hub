@@ -5,13 +5,21 @@ import useLimit from "@/hooks/use-limit";
 import { MangaLatestResult } from "@/models/manga";
 import useMangaStore from "@/stores/manga.store";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 type Props = {
 }
 
 const AllManga = (props: Props) => {
-    const {limitForSearch} = useLimit()
+    return <Suspense>
+        <Search />
+    </Suspense>
+}
+
+export default AllManga
+
+const Search = () => {
+    const { limitForSearch } = useLimit()
     const searchParams = useSearchParams().get('title');
 
     const {
@@ -25,7 +33,7 @@ const AllManga = (props: Props) => {
     const [total, setTotal] = useState<number>(0)
 
     useEffect(() => {
-        if(limitForSearch !== 0) {
+        if (limitForSearch !== 0) {
             getMangaByTitle(searchParams!, 0, limitForSearch).then((res) => {
                 setData(res.data)
                 setTotal(res.total)
@@ -35,11 +43,11 @@ const AllManga = (props: Props) => {
     }, [searchParams, limitForSearch])
 
     const handleLoadMore = () => {
-        if(!isLoadingMangaByTitle && searchParams) {
+        if (!isLoadingMangaByTitle && searchParams) {
             setPage(page + 1)
             getMangaByTitle(searchParams, page, limitForSearch).then((res) => {
                 // console.log(res);
-                if(res) {
+                if (res) {
                     setData([...data, ...res.data])
                 }
             })
@@ -62,5 +70,3 @@ const AllManga = (props: Props) => {
         </div>
     )
 }
-
-export default AllManga
